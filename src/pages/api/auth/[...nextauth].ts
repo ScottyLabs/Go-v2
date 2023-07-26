@@ -1,26 +1,26 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import env from "env/server.mjs";
-import prisma from "../../../server/db/client";
+import prisma from "server/db/client";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    jwt: async ({ token, account, profile }) => {
+      if (profile) token.profile = profile;
+      if (account?.access_token) token.accessToken = account.access_token;
+      return token;
+    },
     signIn: async ({ user }) => {
       const isAllowedToSignIn = user.email?.endsWith("andrew.cmu.edu");
-      if (isAllowedToSignIn) {
-        return true;
-      }
-      return false;
+      return !!isAllowedToSignIn;
     },
-    session: async ({ session, user }) => {
-      // eslint-disable-next-line no-param-reassign
-      session.user = JSON.parse(JSON.stringify(user));
+    session: async ({ session, token }) => {
+      if (token.sub) session.user.id = token.sub;
       return session;
     },
   },
-  secret: env.NEXTAUTH_SECRET,
+  session: { strategy: "jwt" },
   theme: { logo: "/dog-logo.svg" },
   adapter: PrismaAdapter(prisma),
   providers: [
