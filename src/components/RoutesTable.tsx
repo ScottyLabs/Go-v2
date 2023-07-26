@@ -288,7 +288,7 @@ export function RoutesTable({ data }: RoutesTableProps) {
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-4 py-4">
+      <div className="flex items-center gap-4">
         <Input
           placeholder="Filter routes..."
           value={(table.getColumn("path")?.getFilterValue() as string) ?? ""}
@@ -323,7 +323,7 @@ export function RoutesTable({ data }: RoutesTableProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="mt-4 rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
