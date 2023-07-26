@@ -21,6 +21,7 @@ model Route {
   path        String   @unique
   location    String
   description String
+  hits        Int      @default(0)
   expiration  DateTime?
   createdAt   DateTime @default(now())
 }

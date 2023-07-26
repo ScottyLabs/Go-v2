@@ -217,6 +217,10 @@ const columns: ColumnDef<Route>[] = [
     header: "Description",
   },
   {
+    accessorKey: "hits",
+    header: "Hits",
+  },
+  {
     accessorKey: "expiration",
     header: "Expiration",
     cell: ({ row }) => (
