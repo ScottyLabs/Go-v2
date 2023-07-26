@@ -1,12 +1,8 @@
 import { GetServerSideProps } from "next";
 import client from "server/db/client";
 
-export default function Page({ notFound }: { notFound: boolean }) {
-  if (notFound) {
-    return <div>Not found</div>;
-  }
-
-  return <div>Redirecting...</div>;
+export default function Page() {
+  return null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -17,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   });
 
   if (!route) {
-    return { props: { notFound: true } };
+    return { notFound: true };
   }
 
   await client.route.update({
