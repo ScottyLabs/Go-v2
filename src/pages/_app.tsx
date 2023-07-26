@@ -1,15 +1,19 @@
-/* eslint-disable react/jsx-props-no-spreading */
-// src/pages/_app.tsx
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
+import { CreateRouteDialog } from "components/CreateRouteDialog";
+import { EditRouteDialog } from "components/EditRouteDialog";
+import { Toaster } from "components/ui/toaster";
 import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
+import "../styles/globals.css";
 import { trpc } from "../utils/trpc";
 
 function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />;
+      <Toaster />
+      <CreateRouteDialog />
+      <EditRouteDialog />
+      <Component {...pageProps} />
     </SessionProvider>
   );
 }
