@@ -39,7 +39,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "components/ui/tooltip";
-import { ChevronDownIcon, MoreHorizontal } from "lucide-react";
+import { ChevronDownIcon, ChevronsUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import useDialogStore from "stores/DialogStore";
@@ -218,11 +218,31 @@ const columns: ColumnDef<Route>[] = [
   },
   {
     accessorKey: "hits",
-    header: "Hits",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Hits
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "expiration",
-    header: "Expiration",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Expiration
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <span>{row.original.expiration?.toLocaleDateString()}</span>
     ),
