@@ -7,7 +7,9 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingState,
+  Table as TableType,
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
@@ -44,6 +46,125 @@ import useDialogStore from "stores/DialogStore";
 import useEditRouteStore from "stores/EditRouteStore";
 import { trpc } from "utils/trpc";
 import { useToast } from "./ui/use-toast";
+
+type TableActionsProps = {
+  table: TableType<Route>;
+};
+function TableActions({ table }: TableActionsProps) {
+  const { toast } = useToast();
+  const context = trpc.useContext();
+  const deleteRoutes = trpc.route.deleteMany.useMutation({
+    onSuccess: async (data) => {
+      await context.route.getAll.invalidate();
+      toast({
+        description: `Deleted ${data.count} routes.`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem>
+          <span
+            className="w-full"
+            onClick={() =>
+              deleteRoutes.mutate({
+                ids: table
+                  .getFilteredSelectedRowModel()
+                  .rows.map((row) => row.original.id),
+              })
+            }
+          >
+            Delete
+          </span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+type RowActionsProps = {
+  row: Row<Route>;
+};
+function RowActions({ row }: RowActionsProps) {
+  const { toast } = useToast();
+  const context = trpc.useContext();
+  const deleteRoute = trpc.route.delete.useMutation({
+    onSuccess: async () => {
+      await context.route.getAll.invalidate();
+      toast({
+        description: "Route deleted.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const { setDialog } = useDialogStore();
+  const { setRoute } = useEditRouteStore();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() => {
+            navigator.clipboard.writeText(row.original.location);
+            toast({
+              description: "Copied to clipboard.",
+            });
+          }}
+        >
+          Copy Link
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <span
+            className="w-full"
+            onClick={() => {
+              setDialog("editRoute");
+              setRoute(row.original);
+            }}
+          >
+            Edit
+          </span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <span
+            className="w-full"
+            onClick={() => deleteRoute.mutate({ id: row.original.id })}
+          >
+            Delete
+          </span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 const columns: ColumnDef<Route>[] = [
   {
@@ -105,117 +226,8 @@ const columns: ColumnDef<Route>[] = [
   {
     id: "actions",
     enableHiding: false,
-    header: ({ table }) => {
-      const { toast } = useToast();
-      const context = trpc.useContext();
-      const deleteRoutes = trpc.route.deleteMany.useMutation({
-        onSuccess: async (data) => {
-          await context.route.getAll.invalidate();
-          toast({
-            description: `Deleted ${data.count} routes.`,
-          });
-        },
-        onError: (error) => {
-          toast({
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-      });
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <span
-                className="w-full"
-                onClick={() =>
-                  deleteRoutes.mutate({
-                    ids: table
-                      .getFilteredSelectedRowModel()
-                      .rows.map((row) => row.original.id),
-                  })
-                }
-              >
-                Delete
-              </span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-    cell: ({ row }) => {
-      const { toast } = useToast();
-      const context = trpc.useContext();
-      const deleteRoute = trpc.route.delete.useMutation({
-        onSuccess: async () => {
-          await context.route.getAll.invalidate();
-          toast({
-            description: "Route deleted.",
-          });
-        },
-        onError: (error) => {
-          toast({
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-      });
-
-      const { setDialog } = useDialogStore();
-      const { setRoute } = useEditRouteStore();
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => {
-                navigator.clipboard.writeText(row.original.location);
-                toast({
-                  description: "Copied to clipboard.",
-                });
-              }}
-            >
-              Copy Link
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <span
-                className="w-full"
-                onClick={() => {
-                  setDialog("editRoute");
-                  setRoute(row.original);
-                }}
-              >
-                Edit
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <span
-                className="w-full"
-                onClick={() => deleteRoute.mutate({ id: row.original.id })}
-              >
-                Delete
-              </span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    header: ({ table }) => <TableActions table={table} />,
+    cell: ({ row }) => <RowActions row={row} />,
   },
 ];
 
@@ -225,7 +237,7 @@ type RoutesTableProps = {
 export function RoutesTable({ data }: RoutesTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -299,7 +311,7 @@ export function RoutesTable({ data }: RoutesTableProps) {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -318,7 +330,7 @@ export function RoutesTable({ data }: RoutesTableProps) {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

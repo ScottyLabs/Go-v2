@@ -11,7 +11,7 @@ export default function Page() {
   if (!routes.isSuccess) return <div>Loading...</div>;
 
   return (
-    <div className="container p-8 space-y-8">
+    <div className="container space-y-8 p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Routes</h1>
         <Button variant="outline" onClick={() => setDialog("createRoute")}>

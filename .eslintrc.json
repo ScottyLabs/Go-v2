@@ -4,17 +4,8 @@
     "project": "./tsconfig.json"
   },
   "plugins": ["@typescript-eslint", "prettier"],
-  "extends": ["next/core-web-vitals", "plugin:react/jsx-runtime", "prettier"],
+  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   "rules": {
-    "prettier/prettier": "error",
-    "react/react-in-jsx-scope": "off"
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
-    }
+    "prettier/prettier": "error"
   }
 }
