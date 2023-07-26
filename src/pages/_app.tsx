@@ -11,7 +11,7 @@ import { ThemeProvider } from "next-themes";
 function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <SessionProvider session={pageProps.session}>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Toaster />
         <CreateRouteDialog />
         <EditRouteDialog />
