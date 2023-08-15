@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     signIn: async ({ user }) => {
-      const isAllowedToSignIn = user.email?.endsWith("andrew.cmu.edu");
+      const isAllowedToSignIn = user.email?.endsWith("scottylabs.org");
       return !!isAllowedToSignIn;
     },
     session: async ({ session, token }) => {
