@@ -26,4 +26,11 @@ export default defineNextConfig({
     locales: ["en"],
     defaultLocale: "en",
   },
+  redirects: async () => [
+    {
+      source: "/",
+      destination: "/dashboard",
+      permanent: true,
+    },
+  ],
 });
