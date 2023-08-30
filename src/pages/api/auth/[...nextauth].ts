@@ -12,7 +12,8 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     signIn: async ({ user }) => {
-      const isAllowedToSignIn = user.email?.endsWith("scottylabs.org");
+      const isAllowedToSignIn =
+        user.email && env.AUTHORIZED_ACCOUNTS.includes(user.email);
       return !!isAllowedToSignIn;
     },
     session: async ({ session, token }) => {
