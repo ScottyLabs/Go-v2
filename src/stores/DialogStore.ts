@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 type DialogStore = {
-  dialog: "createRoute" | "editRoute" | null;
-  setDialog: (dialog: "createRoute" | "editRoute" | null) => void;
+  dialog: "createRoute" | "editRoute" | "qr" | null;
+  setDialog: (dialog: "createRoute" | "editRoute" | "qr" | null) => void;
 };
 
 export default create<DialogStore>((set) => ({

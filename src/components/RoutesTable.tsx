@@ -46,6 +46,7 @@ import useDialogStore from "stores/DialogStore";
 import useEditRouteStore from "stores/EditRouteStore";
 import { trpc } from "utils/trpc";
 import { useToast } from "./ui/use-toast";
+import useQrStore from "stores/QrStore";
 
 type TableActionsProps = {
   table: TableType<Route>;
@@ -119,7 +120,8 @@ function RowActions({ row }: RowActionsProps) {
   });
 
   const { setDialog } = useDialogStore();
-  const { setRoute } = useEditRouteStore();
+  const { setRoute: setEditRoute } = useEditRouteStore();
+  const { setRoute: setQrRoute } = useQrStore();
 
   return (
     <DropdownMenu>
@@ -141,13 +143,21 @@ function RowActions({ row }: RowActionsProps) {
         >
           Copy Link
         </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setDialog("qr");
+            setQrRoute(row.original);
+          }}
+        >
+          Get QR Code
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <span
             className="w-full"
             onClick={() => {
               setDialog("editRoute");
-              setRoute(row.original);
+              setEditRoute(row.original);
             }}
           >
             Edit

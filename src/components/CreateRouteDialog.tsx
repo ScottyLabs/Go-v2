@@ -56,6 +56,12 @@ export function CreateRouteDialog() {
       description: z.string(),
       expiration: z.coerce.date().optional(),
     }),
+    defaultValues: {
+      path: "",
+      location: "",
+      description: "",
+      expiration: undefined,
+    },
   });
 
   const { dialog, setDialog } = useDialogStore();
@@ -157,7 +163,7 @@ export function CreateRouteDialog() {
                           selected={field.value}
                           onSelect={field.onChange}
                           disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
+                            date < new Date() || date < new Date("1900-01-01")
                           }
                           initialFocus
                         />
