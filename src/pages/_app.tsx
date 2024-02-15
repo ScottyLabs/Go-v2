@@ -1,17 +1,16 @@
 import { CreateRouteDialog } from "components/CreateRouteDialog";
 import { EditRouteDialog } from "components/EditRouteDialog";
 import { Toaster } from "components/ui/toaster";
-import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { trpc } from "../utils/trpc";
 import { ThemeProvider } from "next-themes";
 import { QrDialog } from "components/QrDialog";
+import { ClerkProvider } from "@clerk/nextjs";
 
-function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={pageProps.session}>
+    <ClerkProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Toaster />
         <QrDialog />
@@ -19,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
         <EditRouteDialog />
         <Component {...pageProps} />
       </ThemeProvider>
-    </SessionProvider>
+    </ClerkProvider>
   );
 }
 
