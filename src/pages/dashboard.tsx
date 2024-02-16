@@ -15,9 +15,9 @@ export default function Page() {
 
   if (!routes.isSuccess || !isLoaded) return <div>Loading...</div>;
 
-  const permissions = session?.user.publicMetadata.permissions as any;
+  const permissions = session?.user.publicMetadata.permissions;
 
-  if (!("includes" in permissions) || !permissions.includes("go")) {
+  if (!Array.isArray(permissions) || !permissions.includes("go")) {
     return <div>Not authorized</div>;
   }
 
