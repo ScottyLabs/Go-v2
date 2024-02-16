@@ -7,7 +7,8 @@ import Image from "next/image";
 
 export default function Qr() {
   const params = useSearchParams();
-  const code = params.get("code");
+
+  const code = params?.get("code");
 
   const [image, setImage] = useState<string | null>(null);
 
