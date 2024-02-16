@@ -11,13 +11,13 @@ export default function Page() {
 
   const { setDialog } = useDialogStore();
 
-  const { isLoaded, isSignedIn, session } = useSession();
+  const { isLoaded, session } = useSession();
 
   if (!routes.isSuccess || !isLoaded) return <div>Loading...</div>;
 
   const permissions = session?.user.publicMetadata.permissions as any;
 
-  if (!("includes" in permissions) || !permissions.includes("route:read")) {
+  if (!("includes" in permissions) || !permissions.includes("go")) {
     return <div>Not authorized</div>;
   }
 
