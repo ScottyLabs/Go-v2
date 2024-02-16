@@ -1,6 +1,8 @@
+import { useSession } from "@clerk/nextjs";
 import { RoutesTable } from "components/RoutesTable";
 import { Button } from "components/ui/button";
 import { Separator } from "components/ui/separator";
+import { useRouter } from "next/navigation";
 import useDialogStore from "stores/DialogStore";
 import { trpc } from "utils/trpc";
 
@@ -9,7 +11,15 @@ export default function Page() {
 
   const { setDialog } = useDialogStore();
 
-  if (!routes.isSuccess) return <div>Loading...</div>;
+  const { isLoaded, isSignedIn, session } = useSession();
+
+  if (!routes.isSuccess || !isLoaded) return <div>Loading...</div>;
+
+  const permissions = session?.user.publicMetadata.permissions as any;
+
+  if (!("includes" in permissions) || !permissions.includes("route:read")) {
+    return <div>Not authorized</div>;
+  }
 
   return (
     <div className="min-h-screen overflow-hidden">
