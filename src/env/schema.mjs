@@ -9,10 +9,6 @@ export const serverSchema = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   CLERK_SECRET_KEY: z.string(),
-  AUTHORIZED_ACCOUNTS: z.preprocess(
-    (arg) => typeof arg === "string" && JSON.parse(arg),
-    z.array(z.string().email()),
-  ),
 });
 
 /**
