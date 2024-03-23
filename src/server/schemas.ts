@@ -26,3 +26,7 @@ export const deleteManyRouteSchema = z.object({
 export const getOneRouteSchema = z.object({
   id: z.string(),
 });
+
+export const getOneQrSchema = z.object({
+  url: z.string()
+})
