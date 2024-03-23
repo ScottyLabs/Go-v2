@@ -32,7 +32,7 @@ export function QrDialog() {
               className="cursor-pointer text-primary underline"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `${env.NEXT_PUBLIC_URL}/qr?code=${encodeURIComponent(
+                  `${env.NEXT_PUBLIC_URL}/api/qr?code=${encodeURIComponent(
                     route.location,
                   )}`,
                 );

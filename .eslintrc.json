@@ -6,6 +6,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }

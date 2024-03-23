@@ -2,10 +2,12 @@ import {
   createRouteSchema,
   deleteManyRouteSchema,
   deleteRouteSchema,
+  getOneQrSchema,
   getOneRouteSchema,
-  updateRouteSchema,
+  updateRouteSchema
 } from "server/schemas";
 import { publicProcedure, router } from "../trpc";
+import QRCode from "qrcode";
 
 export default router({
   create: publicProcedure
