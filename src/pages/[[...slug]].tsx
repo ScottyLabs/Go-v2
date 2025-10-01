@@ -10,7 +10,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   console.log(context.resolvedUrl.split("?"));
 
   const route = await client.route.findFirst({
-    where: { path: context.resolvedUrl },
+    where: { path: url },
   });
 
   if (!route) {
