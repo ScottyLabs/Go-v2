@@ -6,7 +6,7 @@ export default function Page() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let [url, query] = context.resolvedUrl.split("?")
+  const [url, query] = context.resolvedUrl.split("?")
   console.log(context.resolvedUrl.split("?"));
 
   const route = await client.route.findFirst({
