@@ -6,7 +6,8 @@ export default function Page() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context.resolvedUrl);
+  let [url, query] = context.resolvedUrl.split("?")
+  console.log(context.resolvedUrl.split("?"));
 
   const route = await client.route.findFirst({
     where: { path: context.resolvedUrl },
@@ -20,6 +21,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     where: { id: route.id },
     data: { hits: route.hits + 1 },
   });
-
+  
+  console.log(route)
+  
   return { redirect: { destination: route.location, permanent: false } };
 };
